@@ -9,8 +9,6 @@
 
 SET NAMES utf8mb4;
 
--- Re-runnable: drop and recreate the database from scratch.
-DROP DATABASE IF EXISTS electronics_mini;
 CREATE DATABASE electronics_mini
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
