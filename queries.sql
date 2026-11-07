@@ -3,8 +3,7 @@ SET NAMES utf8mb4;
 USE electronics_mini;
 
 -- -----------------------------------------------------------------------------
--- Query 1. Completed orders received in January 2025, with customer,
---          repairer and received_at.
+-- Query 1. 
 -- -----------------------------------------------------------------------------
 SELECT
     so.order_id,
@@ -23,9 +22,7 @@ WHERE so.status = 'Completed'
 ORDER BY so.received_at, so.order_id;
 
 -- -----------------------------------------------------------------------------
--- Query 2. Number of orders per specialty in Q1 2025 (all statuses),
---          including specialties with 0 orders.
---          The date filter is in the ON clause so the LEFT JOIN keeps them.
+-- Query 2. 
 -- -----------------------------------------------------------------------------
 SELECT
     s.specialty_id,
@@ -42,8 +39,7 @@ GROUP BY s.specialty_id, s.name
 ORDER BY s.specialty_id;
 
 -- -----------------------------------------------------------------------------
--- Query 3. Customers with at least one non-Cancelled order that has no
---          handover report yet. Each customer appears once (EXISTS).
+-- Query 3. 
 -- -----------------------------------------------------------------------------
 SELECT
     c.customer_id,
@@ -60,8 +56,7 @@ WHERE EXISTS (
 ORDER BY c.customer_id;
 
 -- -----------------------------------------------------------------------------
--- Query 4. Average repair cost per Completed order for each specialty
---          (all time). Only specialties that have incurred a cost.
+-- Query 4.
 -- -----------------------------------------------------------------------------
 SELECT
     s.specialty_id,
@@ -78,9 +73,7 @@ HAVING SUM(sr.cost) > 0
 ORDER BY s.specialty_id;
 
 -- -----------------------------------------------------------------------------
--- Query 5. Top 3 repairers by number of Completed orders in 2025.
---          Ties are broken by repairer_id ascending; only repairers with
---          at least one such order (INNER JOIN).
+-- Query 5. 
 -- -----------------------------------------------------------------------------
 SELECT
     r.repairer_id,
@@ -96,8 +89,7 @@ ORDER BY completed_orders_2025 DESC, r.repairer_id ASC
 LIMIT 3;
 
 -- -----------------------------------------------------------------------------
--- Query 6. Total amount paid by each customer in 2025 (by payment_date),
---          including customers who paid nothing (shown as 0).
+-- Query 6. 
 -- -----------------------------------------------------------------------------
 SELECT
     c.customer_id,
@@ -115,8 +107,7 @@ LEFT JOIN (
 ORDER BY c.customer_id;
 
 -- -----------------------------------------------------------------------------
--- Query 7. Customers with no payment record at all (all time),
---          including customers who have never placed an order.
+-- Query 7. 
 -- -----------------------------------------------------------------------------
 SELECT
     c.customer_id,
@@ -131,9 +122,7 @@ WHERE NOT EXISTS (
 ORDER BY c.customer_id;
 
 -- -----------------------------------------------------------------------------
--- Query 8. All customers ranked by total confirmed repair cost (descending),
---          regardless of payment; ties ordered by customer_id ascending.
---          Payments are not joined here, so costs are never double-counted.
+-- Query 8. 
 -- -----------------------------------------------------------------------------
 SELECT
     c.customer_id,
@@ -146,9 +135,7 @@ GROUP BY c.customer_id, c.full_name
 ORDER BY total_confirmed_cost DESC, c.customer_id ASC;
 
 -- -----------------------------------------------------------------------------
--- Query 9. Cancellation rate of each repairer in 2025:
---          Cancelled orders / total orders of the year * 100,
---          rounded to 2 decimals; NULL when the repairer has no order in 2025.
+-- Query 9. 
 -- -----------------------------------------------------------------------------
 SELECT
     r.repairer_id,
@@ -166,8 +153,7 @@ GROUP BY r.repairer_id, r.full_name
 ORDER BY r.repairer_id;
 
 -- -----------------------------------------------------------------------------
--- Query 10. Customers with more than 3 Completed orders in 2025, with the
---           count; sorted by count descending.
+-- Query 10. 
 -- -----------------------------------------------------------------------------
 SELECT
     c.customer_id,
