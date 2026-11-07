@@ -1,11 +1,3 @@
--- =============================================================================
--- Exercise 03 - Electronic Device Repair Management
--- File 1/4 : schema.sql
--- Purpose  : Create the electronics_mini database, its 6 tables and all
---            constraints (PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK, ENUM).
--- Requires : MySQL 8.0.16+ (CHECK constraints are enforced from 8.0.16).
--- Run order: schema.sql -> seed.sql -> queries.sql -> views.sql
--- =============================================================================
 
 SET NAMES utf8mb4;
 
