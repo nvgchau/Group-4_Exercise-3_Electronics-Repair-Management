@@ -111,6 +111,3 @@ CREATE INDEX idx_orders_received_at ON service_orders (received_at);
 CREATE INDEX idx_orders_status      ON service_orders (status);
 CREATE INDEX idx_payments_date      ON payments (payment_date);
 
--- Cross-table rules (only Completed orders have a report, payment only after a
--- confirmed cost, total paid <= cost) cannot be written as CHECK constraints.
--- They are verified by the validation queries at the end of seed.sql.
