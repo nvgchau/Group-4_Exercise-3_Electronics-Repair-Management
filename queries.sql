@@ -1,15 +1,3 @@
--- =============================================================================
--- Exercise 03 - Electronic Device Repair Management
--- File 3/4 : queries.sql
--- Purpose  : The 10 independent queries of Part C.
--- Conventions:
---   * received_at is DATETIME, so date ranges use half-open intervals
---     [start, end), e.g. Q1 2025 = received_at >= '2025-01-01'
---                                 AND received_at <  '2025-04-01'.
---   * Every result includes the ID and the name so that people with the same
---     name can be told apart.
--- Run order: schema.sql -> seed.sql -> queries.sql -> views.sql
--- =============================================================================
 
 SET NAMES utf8mb4;
 USE electronics_mini;
