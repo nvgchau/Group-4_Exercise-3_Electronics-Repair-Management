@@ -1,15 +1,4 @@
--- =============================================================================
--- Exercise 03 - Electronic Device Repair Management
--- File 2/4 : seed.sql
--- Purpose  : Load sample data and validate it.
---   Part 1  Reset tables (makes this file safe to run more than once)
---   Part 2  INSERT sample data
---   Part 3  Validation queries (every row must show result = PASS)
---   Part 4  Constraint-violation examples (commented out on purpose)
--- Run order: schema.sql -> seed.sql -> queries.sql -> views.sql
--- Note     : Text values (names, addresses, diagnoses...) are sample data in
---            Vietnamese; all fictional.
--- =============================================================================
+
 
 SET NAMES utf8mb4;
 USE electronics_mini;
