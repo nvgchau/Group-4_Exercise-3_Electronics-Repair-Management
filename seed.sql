@@ -5,8 +5,6 @@ USE electronics_mini;
 
 -- =============================================================================
 -- PART 1. RESET TABLES
--- Without this step, running seed.sql a second time fails on every INSERT
--- with ERROR 1062 (duplicate primary key).
 -- =============================================================================
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE payments;
@@ -19,12 +17,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- =============================================================================
 -- PART 2. SAMPLE DATA
--- Row counts: specialties 6, repairers 8, customers 12,
---             service_orders 22, service_reports 16, payments 18
 -- =============================================================================
 START TRANSACTION;
 
--- Specialty 6 has no repairer, so it never has any order.
 INSERT INTO specialties (specialty_id, name) VALUES
 (1, 'Máy tính & Laptop'),
 (2, 'Điện thoại di động'),
@@ -33,8 +28,6 @@ INSERT INTO specialties (specialty_id, name) VALUES
 (5, 'Thiết bị mạng & Camera'),
 (6, 'Máy chơi game');
 
--- Repairers 2 and 5 share the same name (tests ID-based distinction).
--- Repairer 8 only has orders in 2024 and 2026 (no order in 2025).
 INSERT INTO repairers (repairer_id, full_name, email, skill, specialty_id) VALUES
 (1, 'Nguyễn Hoàng Long', 'long.nh@suachua.vn',  'Phần cứng laptop, thay ổ cứng, cài đặt hệ điều hành', 1),
 (2, 'Trần Thị Mai',      'mai.tt@suachua.vn',   'Sửa bo mạch chủ, card đồ họa',                        1),
@@ -45,8 +38,6 @@ INSERT INTO repairers (repairer_id, full_name, email, skill, specialty_id) VALUE
 (7, 'Đặng Minh Quân',    'quan.dm@suachua.vn',  'Router, camera IP, firmware',                         5),
 (8, 'Bùi Thanh Sơn',     'son.bt@suachua.vn',   'Thiết bị âm thanh hi-end',                            4);
 
--- Customers 1 and 3 share the same name.
--- Customer 10 has no order at all (phone and address left NULL).
 INSERT INTO customers (customer_id, full_name, phone, address) VALUES
 (1,  'Nguyễn Thị Hương', '0912345601', 'Cầu Giấy, Hà Nội'),
 (2,  'Lê Minh Tuấn',     '0912345602', 'Đống Đa, Hà Nội'),
@@ -61,13 +52,6 @@ INSERT INTO customers (customer_id, full_name, phone, address) VALUES
 (11, 'Cao Thị Ngọc',     '0912345611', 'Nam Từ Liêm, Hà Nội'),
 (12, 'Đinh Văn Phúc',    '0912345612', 'Bắc Từ Liêm, Hà Nội');
 
--- Time coverage:
---   Orders 1-5    January 2025       (order 5 at 31 Jan 23:30)
---   Orders 6-11   Feb - Mar 2025     (order 11 at 31 Mar 23:59:59, last second of Q1)
---   Orders 12-18  Apr - Dec 2025     (order 12 at 01 Apr 00:00, first second after Q1)
---   Orders 19-22  Outside 2025       (19, 20 in 2024; 21, 22 in 2026)
--- Status: Pending = 10, 17, 22; Cancelled = 4, 15, 18; all others Completed.
--- Customer 1 has 5 Completed orders in 2025 (1, 3, 6, 13, 14).
 INSERT INTO service_orders
     (order_id, customer_id, repairer_id, received_at, status, device_name, serial_number) VALUES
 (1,  1,  1, '2025-01-03 08:30:00', 'Completed', 'Laptop Dell Inspiron 15',  'DL-INS15-7781'),
@@ -93,8 +77,6 @@ INSERT INTO service_orders
 (21, 9,  8, '2026-01-01 00:00:00', 'Completed', 'Loa Marshall Emberton II', 'MR-EMB2-9914'),
 (22, 9,  3, '2026-02-10 11:00:00', 'Pending',   'Samsung Galaxy Z Flip5',   'SS-ZF5-2268');
 
--- Exactly one report for each of the 16 Completed orders; none for others.
--- Report 10 (order 12) is a free warranty repair: cost = 0.
 INSERT INTO service_reports
     (report_id, order_id, diagnosis, solution, warranty_days, cost) VALUES
 (1,  1,  'Ổ cứng HDD có bad sector, máy khởi động chậm',   'Thay SSD 512GB, chuyển dữ liệu, cài lại Windows',  90,  1850000.00),
@@ -114,11 +96,7 @@ INSERT INTO service_reports
 (15, 20, 'Quạt tản nhiệt kêu to, máy nóng',                 'Thay quạt, vệ sinh tổng thể',                       60,  1650000.00),
 (16, 21, 'Loa không nhận sạc',                              'Thay mạch sạc',                                     60,  1200000.00);
 
--- Payments only for orders that have a report; total per order <= cost.
---   Multiple instalments : order 2 (3x), order 13 (2x), order 16 (2x, 2nd in 2026)
---   Partially paid       : order 6, 8, 21
---   Not paid at all      : order 7, 12 (cost 0)
---   Customers with orders but no payment: 4, 5, 6, 11
+
 INSERT INTO payments (payment_id, order_id, amount, payment_date, method) VALUES
 (1,  1,  1850000.00, '2025-01-05', 'Cash'),
 (2,  2,  1000000.00, '2025-01-10', 'BankTransfer'),
@@ -143,7 +121,6 @@ COMMIT;
 
 -- =============================================================================
 -- PART 3. VALIDATION QUERIES
--- Each result set has a "result" column. All rows must show PASS.
 -- =============================================================================
 
 -- 3.1 Minimum row count per table
