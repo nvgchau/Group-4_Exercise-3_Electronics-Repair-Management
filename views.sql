@@ -1,10 +1,4 @@
--- =============================================================================
--- Exercise 03 - Electronic Device Repair Management
--- File 4/4 : views.sql
--- Purpose  : Create the 3 views of Part D. All views cover the whole time
---            range (not limited to 2025).
--- Run order: schema.sql -> seed.sql -> queries.sql -> views.sql
--- =============================================================================
+
 
 SET NAMES utf8mb4;
 USE electronics_mini;
